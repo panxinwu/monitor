@@ -122,10 +122,13 @@ let   pageTitle = '',
     });
    
     await page.evaluateAsync(function () {
+
         console.log('title:'+document.title);
-        let heightPos = 0;
-        let dtd = new $.Deferred();
-        let scrollClock = setInterval(function(){
+
+        var heightPos = 0;
+        const dtd = new $.Deferred();
+
+        var scrollClock = setInterval(function(){
             if(heightPos <= $(document).height()){
                 heightPos += 500;
                 console.log(heightPos);

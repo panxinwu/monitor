@@ -1,8 +1,10 @@
 import rp from 'request-promise';
 require('shelljs/global');
+
 const schedule = require('node-schedule');
-let rule = new schedule.RecurrenceRule();
-rule.minute = [0,30];
+
+const rule = new schedule.RecurrenceRule();
+    rule.minute = [7,9];
 
 async function doPhantom () {
     let res = await rp('http://json.diao.li/getjson/58b519f1d296dc3b050d8ff9');
