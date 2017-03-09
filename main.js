@@ -4,7 +4,7 @@ require('shelljs/global');
 const schedule = require('node-schedule');
 
 const rule = new schedule.RecurrenceRule();
-    rule.minute = [7,9];
+    rule.minute = [0,30];
 
 async function doPhantom () {
     let res = await rp('http://json.diao.li/getjson/58b519f1d296dc3b050d8ff9');
