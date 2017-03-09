@@ -13,9 +13,9 @@ let   pageTitle = '',
 (async function() {
     function createHAR(address, title, startTime, resources)
     {
-        var entries = [];
+        let entries = [];
         resources.forEach(function (resource) {
-            var request = resource.request,
+            let request = resource.request,
                 startReply = resource.startReply,
                 endReply = resource.endReply;
 
@@ -123,9 +123,9 @@ let   pageTitle = '',
    
     await page.evaluateAsync(function () {
         console.log('title:'+document.title);
-        var heightPos = 0;
-        var dtd = new $.Deferred();
-        var scrollClock = setInterval(function(){
+        let heightPos = 0;
+        let dtd = new $.Deferred();
+        let scrollClock = setInterval(function(){
             if(heightPos <= $(document).height()){
                 heightPos += 500;
                 console.log(heightPos);
@@ -160,19 +160,13 @@ let   pageTitle = '',
     }, outObj);
 
     emitter.on('scrollEnd',function(data){
-        // await page.render(pageTitle+ '.jpg', { format: "jpg", quality: 500 });
-        // console.log('截图ing');
-        // console.log('======================================');
-        // console.log(outObj.pageResource);
         har = createHAR(url,pageTitle, pageStartTime, outObj.pageResource);
-        // console.log(JSON.stringify(har, undefined, 4));
-        var reg = /^image/g;
-        var isImageValue,
+        const reg = /^image/g;
+        let isImageValue,
             imageSizeValue,
             imageUrl,
             isImage;
-            // console.log(har.log.entries.length);
-        for(var i = 0; i < har.log.entries.length; i++){
+        for(let i = 0; i < har.log.entries.length; i++){
             isImageValue = har.log.entries[i].response.headers[2].value;
             imageSizeValue = har.log.entries[i].response.headers[3].value;
             imageUrl = har.log.entries[i].request.url;
@@ -181,14 +175,12 @@ let   pageTitle = '',
                 testImg(imageUrl, imageSizeValue);
             }
         }
-        // fs.writeFile(pageTitle + '.har', JSON.stringify(har, undefined, 4), 'w');
-        console.log('===============');
         console.log(badImage);
         // report(JSON.stringify(badImage));
     });
 
 
-    var badImage = [];
+    let badImage = [];
     //检测图片是否符合尺寸规则
     function testImg(url,size){
         if(size/100 > 100){
