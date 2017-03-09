@@ -3,7 +3,9 @@ import rp from 'request-promise';
 // var getData = require("./req.js");
 require('shelljs/global');
 // var deferred = require('q').defer();
-
+var schedule = require('node-schedule');
+var rule = new schedule.RecurrenceRule();
+rule.minute = [0,30];
 async function doPhantom () {
     let res = await rp('http://json.diao.li/getjson/58b519f1d296dc3b050d8ff9');
     res = JSON.parse(res);
@@ -24,7 +26,11 @@ async function doPhantom () {
         });
     }
 }
-doPhantom();
+
+var j = schedule.scheduleJob(rule, function(){
+    console.log('定时任务启动');
+    doPhantom();
+});
 
 // request('http://json.diao.li/getjson/58b519f1d296dc3b050d8ff9', function (error, response, body) {
 //     if(!error){

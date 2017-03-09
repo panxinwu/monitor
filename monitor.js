@@ -14,34 +14,18 @@ let   pageTitle = '',
     function createHAR(address, title, startTime, resources)
     {
         var entries = [];
-
-        resources.forEach( (item,i) => {
-            // console.log('item:',item);
-            // if(item){
-            //     outObj.pageResource.remove(item);
-            // }
-        });
-
-        console.log('###########'+address);
-        console.log('###########'+title);
-        console.log('###########'+startTime);
-        console.log('###########'+resources);
         resources.forEach(function (resource) {
             var request = resource.request,
                 startReply = resource.startReply,
                 endReply = resource.endReply;
-            // console.log('startReply',resource.startReply);
-            // console.log('endReply',resource.endReply);
 
             if (!request || !startReply || !endReply) {
                 return;
             }
 
-            // Exclude Data URI from HAR file because
-            // they aren't included in specification
             if (request.url.match(/(^data:image\/.*)/i)) {
                 return;
-        }
+            }
             entries.push({
                 startedDateTime: request.time,
                 time: endReply.time - request.time,
@@ -113,7 +97,6 @@ let   pageTitle = '',
         }
         if(/^title/g.test(msg)){
             pageTitle = msg.split(':')[1];
-            console.log('onConsoleMessage'+pageTitle);
         }
         console.info(msg)
     });
@@ -130,7 +113,6 @@ let   pageTitle = '',
     outObj.pageRecieved = [];
 
 
-    // var emitter = new events.EventEmitter();
     await page.on('onCallback', async function (data) {
         switch(data) {
             case 1:
@@ -179,33 +161,29 @@ let   pageTitle = '',
 
     emitter.on('scrollEnd',function(data){
         // await page.render(pageTitle+ '.jpg', { format: "jpg", quality: 500 });
-        console.log('截图ing');
-        console.log('======================================');
-        
+        // console.log('截图ing');
+        // console.log('======================================');
         // console.log(outObj.pageResource);
         har = createHAR(url,pageTitle, pageStartTime, outObj.pageResource);
-        console.log(JSON.stringify(har, undefined, 4));
+        // console.log(JSON.stringify(har, undefined, 4));
         var reg = /^image/g;
         var isImageValue,
             imageSizeValue,
             imageUrl,
             isImage;
-            console.log(har.log.entries.length);
+            // console.log(har.log.entries.length);
         for(var i = 0; i < har.log.entries.length; i++){
             isImageValue = har.log.entries[i].response.headers[2].value;
             imageSizeValue = har.log.entries[i].response.headers[3].value;
             imageUrl = har.log.entries[i].request.url;
             isImage = reg.test(isImageValue)
             if(isImage){
-                console.log(imageSizeValue);
-                console.log(imageUrl);
                 testImg(imageUrl, imageSizeValue);
             }
         }
         // fs.writeFile(pageTitle + '.har', JSON.stringify(har, undefined, 4), 'w');
         console.log('===============');
-        // console.log(JSON.stringify(badImage));
-        console.log('===============');
+        console.log(badImage);
         // report(JSON.stringify(badImage));
     });
 
@@ -214,7 +192,7 @@ let   pageTitle = '',
     //检测图片是否符合尺寸规则
     function testImg(url,size){
         if(size/100 > 100){
-            console.log('size::::::'+size);
+            // console.log('size::::::'+size);
             badImage.push(url);
         }
     }
