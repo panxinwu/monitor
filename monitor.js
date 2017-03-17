@@ -260,21 +260,12 @@ async function doPhantom() {
                                             //         maxb2kb: 100
                                             //     }
                                             // ];
-                                                if((imgRes.width >= 600 || imgRes.height >= 600) && b2kb >=150){
-                                                    badImage[badImageNum] = imgRes;
-                                                    badImage[badImageNum].url = imageUrl;
-                                                }else if((imgRes.width >= 400 || imgRes.height >= 400) && b2kb >=100){
-                                                    badImage[badImageNum] = imgRes;
-                                                    badImage[badImageNum].url = imageUrl;
-                                                }else if((imgRes.width >= 200 || imgRes.height >= 200) && b2kb >=40){
+                                                if(((imgRes.width >= 600 || imgRes.height >= 600) && b2kb >=150) || ((imgRes.width >= 200 || imgRes.height >= 200) && b2kb >=40) || ((imgRes.width >= 400 || imgRes.height >= 400) && b2kb >=100)){
                                                     badImage[badImageNum] = imgRes;
                                                     badImage[badImageNum].url = imageUrl;
                                                 }
-                                                badImageNum++;
-                                                return {
-                                                    url: imageUrl,
-                                                    ...imgRes
-                                                };
+                                                    badImageNum++;
+                                                // return badImage;
                                         }).then((imgres) => imgres).catch(function(err){
                                             console.log(err);
                                         });
@@ -284,7 +275,7 @@ async function doPhantom() {
                         }//end of for
                         Promise.all(testImg).then(function(values){
                             console.log('#############');
-                            console.log(values);
+                            console.log(badImage);
                         });
                     });
                 }(item));

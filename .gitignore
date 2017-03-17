@@ -4,3 +4,4 @@ node_modules/
 .vscode/
 .main_old.js
 .netsniff_old.js
+backups/
