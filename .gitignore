@@ -2,3 +2,5 @@ node_modules/
 .DS_Store
 *.zip
 .vscode/
+.main_old.js
+.netsniff_old.js

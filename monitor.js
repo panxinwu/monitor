@@ -220,6 +220,7 @@ async function doPhantom() {
                     }, outObj);
 
                     emitter.on('operateEnd', function (data) {
+                        console.log('operateEnd');
                         har = createHAR(item.url, pageTitle, pageStartTime, outObj.pageResource);
                         const reg = /^image/g;
                         let isImageValue,
@@ -247,6 +248,18 @@ async function doPhantom() {
                                             console.log(imgRes.width);
                                             console.log(imgRes.height);
                                             console.log(b2kb);
+                                            // const map = [
+                                            //     {
+                                            //         start: 200,
+                                            //         end: 400,
+                                            //         maxb2kb: 40
+                                            //     },
+                                            //     {
+                                            //         start: 400,
+                                            //         end: 600,
+                                            //         maxb2kb: 100
+                                            //     }
+                                            // ];
                                                 if((imgRes.width >= 600 || imgRes.height >= 600) && b2kb >=150){
                                                     badImage[badImageNum] = imgRes;
                                                     badImage[badImageNum].url = imageUrl;
@@ -258,16 +271,20 @@ async function doPhantom() {
                                                     badImage[badImageNum].url = imageUrl;
                                                 }
                                                 badImageNum++;
-                                                resolve();
-                                        }).catch(function(err){
+                                                return {
+                                                    url: imageUrl,
+                                                    ...imgRes
+                                                };
+                                        }).then((imgres) => imgres).catch(function(err){
+                                            console.log(err);
                                         });
                                     })(badImage,imageUrl,b2kb);
                                 }//end of if
                             }
                         }//end of for
-                        Promise.all(testImg).then(function(){
+                        Promise.all(testImg).then(function(values){
                             console.log('#############');
-                            winston.info(badImage);
+                            console.log(values);
                         });
                     });
                 }(item));
