@@ -1,11 +1,17 @@
 import rp from 'request-promise';
 require('shelljs/global');
+const winston = require('winston');
+      
 
 const schedule = require('node-schedule');
 
 const rule = new schedule.RecurrenceRule();
     rule.minute = [0,30];
-
+winston.configure({
+    transports: [
+        new (winston.transports.File)({ filename: 'logInfo.log' })
+    ]
+});
 async function doPhantom () {
     let res = await rp('http://json.diao.li/getjson/58b519f1d296dc3b050d8ff9');
         res = JSON.parse(res);
@@ -15,19 +21,19 @@ async function doPhantom () {
         echo('Sorry, this script requires phantomjs');
         exit(1);
     }
-    console.log(res);
+    winston.log(res);
     if (rtn === 0) {
         data.forEach(async item => {
             const child = await new Promise((resolve, reject) => {
-                exec('node monitor.js ' + item.url, (code, stdout, stderr) => {
-                    resolve(stdout);
-                });
+                console.log(item);
             });
         });
     }
 }
 
 let j = schedule.scheduleJob(rule, function(){
-    console.log('定时任务启动');
-    doPhantom();
+    winston.log('定时任务启动');
+    // doPhantom();
 });
+    doPhantom();
+
