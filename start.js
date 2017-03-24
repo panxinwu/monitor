@@ -1,4 +1,4 @@
 require('babel-core/register')()
 require('babel-polyfill')
 
-require('./monitor');
+require('./src/monitor');
