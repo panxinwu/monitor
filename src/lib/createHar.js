@@ -1,4 +1,4 @@
-module.exports = function (address, title, startTime, resources,page) {
+module.exports = function (address, title, startTime, resources, page) {
     let entries = [];
     resources.forEach(function (resource) {
         let request = resource.request,
